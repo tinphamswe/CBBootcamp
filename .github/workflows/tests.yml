@@ -22,11 +22,22 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install gems
+        run: bundle install
+
       - name: Install SwiftLint
         run: brew install swiftlint
 
-      - name: Run SwiftLint
-        run: swiftlint lint --strict
+      - name: Run Fastlane lint
+        run: bundle exec fastlane ios lint
 
   test:
     name: Build and test

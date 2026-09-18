@@ -1,6 +1,17 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Validates Swift style with SwiftLint"
+  lane :lint do
+    swiftlint(
+      config_file: ".swiftlint.yml",
+      strict: true,
+      no_cache: true,
+      reporter: "github-actions-logging",
+      raise_if_swiftlint_error: true
+    )
+  end
+
   desc "Builds the project and executes its test suite"
   lane :unit_test do |options|
     scan(
