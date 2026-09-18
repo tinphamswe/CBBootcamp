@@ -3,8 +3,6 @@ name: iOS CI
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,32 +22,21 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
 
+      - name: Install Bundler
+        run: gem install bundler
+
       - name: Install gems
         run: bundle install
-
-      - name: Install iOS Simulator runtime
-        run: |
-          runtime_directory="$RUNNER_TEMP/ios-simulator-runtime"
-          mkdir -p "$runtime_directory"
-          for attempt in 1 2 3; do
-            if xcodebuild -downloadPlatform iOS -exportPath "$runtime_directory"; then
-              break
-            fi
-            if [ "$attempt" = 3 ]; then
-              exit 1
-            fi
-          done
-          xcodebuild -importPlatform "$runtime_directory"/*.dmg
-
-      - name: Create simulator
-        run: |
-          simulator_id="$(xcrun simctl create 'CBBootcamp CI' 'iPhone 16 Pro')"
-          echo "SIMULATOR_ID=$simulator_id" >> "$GITHUB_ENV"
 
       - name: Run tests
         run: bundle exec fastlane ios unit_test
