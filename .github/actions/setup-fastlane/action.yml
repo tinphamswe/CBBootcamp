@@ -1,0 +1,30 @@
+name: Setup Fastlane
+description: Select Xcode when needed and install the Ruby dependencies for Fastlane.
+
+inputs:
+  xcode-version:
+    description: Xcode version to select. Leave empty when Xcode is not required.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Select Xcode
+      if: ${{ inputs.xcode-version != '' }}
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ inputs.xcode-version }}
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+
+    - name: Install Bundler
+      shell: bash
+      run: gem install bundler
+
+    - name: Install gems
+      shell: bash
+      run: bundle install
