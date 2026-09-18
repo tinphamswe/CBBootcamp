@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct CBBootcampApp: App {
+    @StateObject private var vm = BluetoothScannerViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(vm: vm)
         }
     }
 }
