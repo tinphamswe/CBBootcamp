@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test iOS app
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Select an available iPhone simulator
+        id: simulator
+        shell: bash
+        run: |
+          set -eo pipefail
+          simulator_id="$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ { print $2; exit }')"
+
+          if [[ -z "$simulator_id" ]]; then
+            echo "No available iPhone simulator was found." >&2
+            exit 1
+          fi
+
+          echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit and UI tests
+        run: |
+          xcodebuild test \
+            -project CBBootcamp.xcodeproj \
+            -scheme CBBootcamp \
+            -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}'
