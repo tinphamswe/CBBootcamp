@@ -1,0 +1,8 @@
+project "CBBootcamp.xcodeproj"
+scheme "CBBootcamp"
+sdk "iphonesimulator"
+devices ["CBBootcamp CI"]
+code_coverage true
+xcargs "-parallel-testing-enabled NO"
+prelaunch_simulator true
+derived_data_path "Build"

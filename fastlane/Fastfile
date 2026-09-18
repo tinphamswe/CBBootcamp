@@ -1,0 +1,11 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Builds the project and executes its test suite"
+  lane :unit_test do |options|
+    scan(
+      clean: options[:clean],
+      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution]
+    )
+  end
+end

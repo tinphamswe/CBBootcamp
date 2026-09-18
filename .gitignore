@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Xcode build products and local state
+Build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+
+# Fastlane output
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/

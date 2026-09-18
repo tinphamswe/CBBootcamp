@@ -24,21 +24,19 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+
+      - name: Install gems
+        run: bundle install
 
       - name: Install iOS Simulator runtime
         run: |
           runtime_directory="$RUNNER_TEMP/ios-simulator-runtime"
           mkdir -p "$runtime_directory"
-          for attempt in 1 2 3; do
-            if xcodebuild -downloadPlatform iOS -exportPath "$runtime_directory"; then
-              break
-            fi
-            if [ "$attempt" = 3 ]; then
-              exit 1
-            fi
-          done
+          xcodebuild -downloadPlatform iOS -exportPath "$runtime_directory"
           xcodebuild -importPlatform "$runtime_directory"/*.dmg
 
       - name: Create simulator
@@ -47,9 +45,4 @@ jobs:
           echo "SIMULATOR_ID=$simulator_id" >> "$GITHUB_ENV"
 
       - name: Run tests
-        run: >-
-          xcodebuild test
-          -project CBBootcamp.xcodeproj
-          -scheme CBBootcamp
-          -destination 'platform=iOS Simulator,id=${{ env.SIMULATOR_ID }}'
-          -parallel-testing-enabled NO
+        run: bundle exec fastlane ios unit_test
