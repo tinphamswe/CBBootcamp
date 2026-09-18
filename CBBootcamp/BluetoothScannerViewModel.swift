@@ -39,8 +39,8 @@ final class BluetoothScannerViewModel: NSObject, ObservableObject {
         statusMessage = "Scanning stopped."
         centralManager.stopScan()
     }
-    
-    func connect(_ peripheral: CBPeripheral, options: [String : Any]? = nil) {
+
+    func connect(_ peripheral: CBPeripheral, options: [String: Any]? = nil) {
         connect(peripheralID: peripheral.identifier, peripheralName: peripheral.name) {
             centralManager.connect(peripheral, options: options)
         }
@@ -84,7 +84,7 @@ extension BluetoothScannerViewModel: CBCentralManagerDelegate {
             scannedPeripherals.append(scannedPeripheral)
         }
     }
-    
+
     func centralManager(
         _ central: CBCentralManager,
         didConnect peripheral: CBPeripheral

@@ -9,12 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var vm: BluetoothScannerViewModel
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
                 statusView
-                
+
                 Button {
                     vm.isScanning ? vm.stopScanning() : vm.scanForPeripherals()
                 } label: {
@@ -26,18 +26,18 @@ struct ContentView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                
+
                 List(vm.scannedPeripherals) { scannedPeripheral in
                     HStack(alignment: .top, spacing: 12) {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(scannedPeripheral.name)
                                 .font(.headline)
-                            
+
                             Text(scannedPeripheral.id.uuidString)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .textSelection(.enabled)
-                            
+
                             Text("RSSI: \(scannedPeripheral.rssi)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
