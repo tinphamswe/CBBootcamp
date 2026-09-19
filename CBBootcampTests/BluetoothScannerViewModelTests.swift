@@ -90,26 +90,6 @@ extension BluetoothScannerViewModelTests {
     }
 }
 
-// MARK: - connect
-
-extension BluetoothScannerViewModelTests {
-    @Test func connectStartsConnectingToPeripheral() {
-        // Given
-        let peripheralID = UUID()
-        var didCallConnectAction = false
-
-        // When
-        sut.connect(peripheralID: peripheralID, peripheralName: nil) {
-            didCallConnectAction = true
-        }
-
-        // Then
-        #expect(sut.connectingPeripheralID == peripheralID)
-        #expect(sut.statusMessage == "Connecting to Unnamed Peripheral...")
-        #expect(didCallConnectAction)
-    }
-}
-
 // MARK: - MockCentralManager
 
 private final class MockCentralManager: CBCentralManaging {

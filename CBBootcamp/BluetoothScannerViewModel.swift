@@ -41,15 +41,9 @@ final class BluetoothScannerViewModel: NSObject, ObservableObject {
     }
 
     func connect(_ peripheral: CBPeripheral, options: [String: Any]? = nil) {
-        connect(peripheralID: peripheral.identifier, peripheralName: peripheral.name) {
-            centralManager.connect(peripheral, options: options)
-        }
-    }
-
-    func connect(peripheralID: UUID, peripheralName: String?, connectAction: () -> Void) {
-        connectingPeripheralID = peripheralID
-        statusMessage = "Connecting to \(peripheralName ?? "Unnamed Peripheral")..."
-        connectAction()
+        connectingPeripheralID = peripheral.identifier
+        statusMessage = "Connecting to \(peripheral.name ?? "Unnamed Peripheral")..."
+        centralManager.connect(peripheral, options: options)
     }
 }
 
