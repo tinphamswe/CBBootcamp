@@ -1,0 +1,14 @@
+included:
+  - CBBootcamp
+  - CBBootcampTests
+  - CBBootcampUITests
+
+excluded:
+  - CBBootcamp.xcodeproj
+  - Build
+  - DerivedData
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1

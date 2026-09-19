@@ -1,0 +1,31 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unit-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: macos-15
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Fastlane
+        uses: ./.github/actions/setup-fastlane
+        with:
+          xcode-version: latest-stable
+
+      - name: Run unit tests
+        run: bundle exec fastlane ios unit_tests

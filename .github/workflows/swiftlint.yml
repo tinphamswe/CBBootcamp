@@ -1,0 +1,32 @@
+name: SwiftLint
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swiftlint-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: SwiftLint
+    runs-on: macos-15
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Fastlane
+        uses: ./.github/actions/setup-fastlane
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run Fastlane lint
+        run: bundle exec fastlane ios lint

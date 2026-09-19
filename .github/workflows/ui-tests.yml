@@ -1,0 +1,31 @@
+name: UI Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: UI Tests
+    runs-on: macos-15
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Fastlane
+        uses: ./.github/actions/setup-fastlane
+        with:
+          xcode-version: latest-stable
+
+      - name: Run UI tests
+        run: bundle exec fastlane ios ui_tests

@@ -1,11 +1,32 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Builds the project and executes its test suite"
-  lane :unit_test do |options|
+  desc "Validates Swift style with SwiftLint"
+  lane :lint do
+    swiftlint(
+      config_file: ".swiftlint.yml",
+      strict: true,
+      no_cache: true,
+      reporter: "github-actions-logging",
+      raise_if_swiftlint_error: true
+    )
+  end
+
+  desc "Builds the project and executes its unit tests"
+  lane :unit_tests do |options|
     scan(
       clean: options[:clean],
-      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution]
+      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution],
+      only_testing: ["CBBootcampTests"]
+    )
+  end
+
+  desc "Builds the project and executes its UI tests"
+  lane :ui_tests do |options|
+    scan(
+      clean: options[:clean],
+      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution],
+      only_testing: ["CBBootcampUITests"]
     )
   end
 end

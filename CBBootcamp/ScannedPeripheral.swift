@@ -12,5 +12,5 @@ struct ScannedPeripheral: Identifiable {
     let id: UUID
     let name: String
     let rssi: Int
-    var peripheral: CBPeripheral? = nil
+    var peripheral: CBPeripheral?
 }
